@@ -216,6 +216,165 @@
   }
 
   /**
+   * Lists all published itineraries and client links from Firebase Realtime Database
+   * @returns {Promise<Array<Object>>}
+   */
+  async function listRecords() {
+    if (!initFirebase()) throw new Error('Firebase could not be initialized.');
+    try {
+      const snapshot = await database.ref('itineraries').once('value');
+      if (!snapshot.exists()) return [];
+      const val = snapshot.val();
+      const records = [];
+      for (const id in val) {
+        if (Object.prototype.hasOwnProperty.call(val, id)) {
+          const item = val[id];
+          if (item && typeof item === 'object') {
+            records.push({
+              id: id,
+              ...item
+            });
+          }
+        }
+      }
+      // Sort newest first
+      records.sort((a, b) => {
+        const timeA = a.updatedAt || a.createdAt || 0;
+        const timeB = b.updatedAt || b.createdAt || 0;
+        return timeB - timeA;
+      });
+      return records;
+    } catch (err) {
+      console.error('Error fetching itinerary records from Firebase:', err);
+      throw err;
+    }
+  }
+
+  /**
+   * Permanently deletes an itinerary record and its PDF from Firebase
+   * @param {string} id
+   */
+  async function deleteRecord(id) {
+    if (!initFirebase()) throw new Error('Firebase could not be initialized.');
+    if (!id) throw new Error('Itinerary ID is required for deletion.');
+
+    // 1. Delete from Realtime Database
+    await database.ref(`itineraries/${id}`).remove();
+
+    // 2. Delete from Storage if it exists
+    if (storage) {
+      try {
+        const storageRef = storage.ref(`itineraries/${id}.pdf`);
+        await storageRef.delete();
+      } catch (storageErr) {
+        // Storage file may not exist or CORS preflight on delete; database deletion is primary
+        console.warn('Firebase Storage file removal notice:', storageErr.message || storageErr);
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Re-uploads / updates a PDF for an existing client link ID
+   * @param {string} id - The existing itinerary link ID
+   * @param {Blob|File} newPdfData - The updated PDF binary
+   * @param {string} newTitle - Optional updated title
+   * @param {function} onProgress - Optional progress callback
+   */
+  async function updateRecordPDF(id, newPdfData, newTitle = null, onProgress = null) {
+    if (!initFirebase()) throw new Error('Firebase could not be initialized.');
+    if (!id) throw new Error('Itinerary ID is required for update.');
+    if (!newPdfData) throw new Error('Updated PDF file is required.');
+
+    if (onProgress) onProgress(20);
+
+    // 1. Encode new PDF to Base64
+    let pdfBase64 = null;
+    try {
+      pdfBase64 = await blobToBase64(newPdfData);
+      if (onProgress) onProgress(50);
+    } catch (e) {
+      console.warn('Could not encode updated PDF to base64:', e);
+    }
+
+    // 2. Attempt Storage re-upload if available
+    let downloadUrl = '';
+    const storagePath = `itineraries/${id}.pdf`;
+    if (storage && window.location.protocol.startsWith('http')) {
+      try {
+        const storageRef = storage.ref(storagePath);
+        const metadata = {
+          contentType: 'application/pdf',
+          customMetadata: {
+            itineraryId: id,
+            updatedAt: new Date().toISOString()
+          }
+        };
+
+        const uploadTask = storageRef.put(newPdfData, metadata);
+        await new Promise((resolve) => {
+          const timer = setTimeout(() => resolve(), 3500);
+          uploadTask.on(
+            firebase.storage.TaskEvent.STATE_CHANGED,
+            (snapshot) => {
+              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              if (onProgress) onProgress(50 + Math.round(progress * 0.4));
+            },
+            (error) => {
+              clearTimeout(timer);
+              resolve();
+            },
+            async () => {
+              clearTimeout(timer);
+              try { downloadUrl = await uploadTask.snapshot.ref.getDownloadURL(); } catch (e) {}
+              resolve();
+            }
+          );
+        });
+      } catch (err) {
+        console.warn('Storage update notice:', err);
+      }
+    }
+
+    if (onProgress) onProgress(90);
+
+    // 3. Update Realtime Database
+    const updates = {
+      updatedAt: Date.now()
+    };
+    if (pdfBase64) updates.pdfBase64 = pdfBase64;
+    if (downloadUrl) updates.pdfUrl = downloadUrl;
+    if (newTitle) updates.title = newTitle;
+    if (newPdfData.name) updates.fileName = newPdfData.name;
+
+    await database.ref(`itineraries/${id}`).update(updates);
+
+    if (onProgress) onProgress(100);
+
+    return {
+      id,
+      downloadUrl,
+      pdfBase64
+    };
+  }
+
+  /**
+   * Updates itinerary metadata without changing the PDF
+   * @param {string} id
+   * @param {Object} meta
+   */
+  async function updateRecordMeta(id, meta) {
+    if (!initFirebase()) throw new Error('Firebase could not be initialized.');
+    if (!id) throw new Error('Itinerary ID is required.');
+    const updates = {
+      ...meta,
+      updatedAt: Date.now()
+    };
+    await database.ref(`itineraries/${id}`).update(updates);
+    return true;
+  }
+
+  /**
    * Returns the final client link for a given itinerary ID
    */
   function getClientLink(id, useLocal = false) {
@@ -230,6 +389,10 @@
     uploadPDF: uploadPDF,
     saveRecord: saveRecord,
     getRecord: getRecord,
+    listRecords: listRecords,
+    deleteRecord: deleteRecord,
+    updateRecordPDF: updateRecordPDF,
+    updateRecordMeta: updateRecordMeta,
     getClientLink: getClientLink,
     CLIENT_HOST_BASE: CLIENT_HOST_BASE,
     LOCAL_VIEWER_BASE: LOCAL_VIEWER_BASE

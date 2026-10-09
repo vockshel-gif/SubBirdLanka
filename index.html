@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SunBird Lanka Tours — Official Tour Itinerary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090e17;
+      --card-bg: #121a28;
+      --card-border: rgba(255, 255, 255, 0.1);
+      --accent: #2563eb;
+      --accent-glow: #38bdf8;
+      --accent-green: #10b981;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --gold: #f59e0b;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .client-header {
+      background: linear-gradient(180deg, #0e1726 0%, #090e17 100%);
+      border-bottom: 1.5px solid var(--card-border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-logo {
+      height: 44px;
+      width: auto;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.05);
+      padding: 2px;
+    }
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      text-transform: uppercase;
+    }
+    .brand-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1.5px solid transparent;
+      font-family: inherit;
+    }
+    .btn-download {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+    }
+    .btn-download:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+    .btn-whatsapp {
+      background: #25d366;
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(37, 211, 102, 0.3);
+    }
+    .btn-whatsapp:hover {
+      background: #1eb857;
+      transform: translateY(-1px);
+    }
+    .btn-call {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .btn-call:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Main Container */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px 20px 30px;
+      gap: 16px;
+    }
+
+    /* Itinerary Banner Card */
+    .banner-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .banner-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .itin-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+    .itin-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .itin-sub span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .security-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+
+    /* PDF Viewer Container */
+    .viewer-frame-wrap {
+      flex: 1;
+      min-height: 75vh;
+      background: #1a2230;
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+    .pdf-iframe {
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      min-height: 75vh;
+      border: none;
+      background: #525659;
+    }
+
+    /* Loading / Error States */
+    .state-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--card-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      text-align: center;
+      z-index: 10;
+    }
+    .spinner {
+      width: 46px;
+      height: 46px;
+      border: 3.5px solid rgba(56, 189, 248, 0.2);
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .state-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+    .state-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 440px;
+      line-height: 1.5;
+    }
+    .state-icon-error {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1.5px solid rgba(239, 68, 68, 0.4);
+      color: #ef4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
+
+    /* Footer */
+    .client-footer {
+      border-top: 1px solid var(--card-border);
+      padding: 16px 20px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: #090e17;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .client-footer strong {
+      color: #e2e8f0;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .client-header {
+        padding: 10px 14px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .brand-wrap {
+        justify-content: center;
+      }
+      .header-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .btn-action {
+        justify-content: center;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+      .banner-card {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+      .banner-meta {
+        align-items: center;
+      }
+      .viewer-frame-wrap {
+        min-height: 65vh;
+      }
+      .pdf-iframe {
+        min-height: 65vh;
+      }
+    }
+  </style>
+
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <!-- SunBird Firebase Service -->
+  <script src="js/firebase-service.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="client-header">
+    <div class="brand-wrap">
+      <img src="Logo/Logo1.png" alt="SunBird Logo" class="brand-logo" onerror="this.style.display='none'">
+      <div>
+        <div class="brand-title">
+          <span>SUNBIRD LANKA TOURS</span>
+          <span class="brand-badge">Official Portal</span>
+        </div>
+        <div class="brand-subtitle">Sri Lanka Travel Expeditions &amp; Luxury Transport</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="tel:+94770000000" class="btn-action btn-call" id="btn-call-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        <span>Call Consultant</span>
+      </a>
+      <a href="#" target="_blank" class="btn-action btn-whatsapp" id="btn-whatsapp-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.086s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/>
+        </svg>
+        <span>WhatsApp</span>
+      </a>
+      <a href="#" class="btn-action btn-download" id="btn-download-link" download>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Download PDF</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Body -->
+  <main class="main-content">
+
+    <!-- Top Banner Card -->
+    <div class="banner-card">
+      <div class="banner-meta">
+        <h1 class="itin-title" id="banner-title">Loading Tour Itinerary...</h1>
+        <div class="itin-sub" id="banner-subtitle">
+          <span>📅 Please wait while your documents are verified</span>
+        </div>
+      </div>
+      <div class="security-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>Private Secure Link</span>
+      </div>
+    </div>
+
+    <!-- Viewer Frame -->
+    <div class="viewer-frame-wrap">
+      <!-- Loading State -->
+      <div class="state-screen" id="loading-screen">
+        <div class="spinner"></div>
+        <div class="state-title">Retrieving Itinerary</div>
+        <div class="state-desc">Fetching encrypted tour quotation documents from SunBird Lanka Cloud...</div>
+      </div>
+
+      <!-- Error State -->
+      <div class="state-screen" id="error-screen" style="display: none;">
+        <div class="state-icon-error">✕</div>
+        <div class="state-title">Itinerary Not Found</div>
+        <div class="state-desc" id="error-desc">The requested itinerary link is either invalid, expired, or has restricted access. Please contact your SunBird travel consultant for assistance.</div>
+      </div>
+
+      <!-- PDF Frame -->
+      <iframe id="pdf-frame" class="pdf-iframe" style="display: none;"></iframe>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="client-footer">
+    <div><strong>SunBird Lanka Tours (Pvt) Ltd</strong> — Registered Tour Operator in Sri Lanka</div>
+    <div>Official Itinerary Portal &amp; Quotation Management • Powered by SunBird Cloud Services</div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const itineraryId = urlParams.get('id');
+
+      const bannerTitle = document.getElementById('banner-title');
+      const bannerSubtitle = document.getElementById('banner-subtitle');
+      const loadingScreen = document.getElementById('loading-screen');
+      const errorScreen = document.getElementById('error-screen');
+      const errorDesc = document.getElementById('error-desc');
+      const pdfFrame = document.getElementById('pdf-frame');
+      const btnDownloadLink = document.getElementById('btn-download-link');
+      const btnWhatsappLink = document.getElementById('btn-whatsapp-link');
+
+      async function loadItinerary() {
+        if (!itineraryId) {
+          showError('No itinerary ID was provided in the link. Please check your URL and try again.');
+          return;
+        }
+
+        try {
+          // Initialize Firebase and fetch record
+          if (!window.SunBirdFirebase) {
+            throw new Error('Firebase service is not available.');
+          }
+
+          const record = await window.SunBirdFirebase.getRecord(itineraryId);
+          if (!record || (!record.pdfUrl && !record.pdfBase64)) {
+            showError('This itinerary does not exist or may have been archived. Please contact SunBird Lanka Tours for an updated link.');
+            return;
+          }
+
+          // Populate Meta
+          bannerTitle.textContent = record.title || 'Official Tour Itinerary & Quotation';
+          document.title = (record.title ? record.title + ' — ' : '') + 'SunBird Lanka Tours';
+
+          let subText = '';
+          if (record.from && record.to) {
+            subText += `<span>📅 ${record.from} to ${record.to}</span>`;
+          }
+          if (record.adults) {
+            subText += `<span>👥 ${record.adults} Adults</span>`;
+          }
+          if (record.clientName) {
+            subText += `<span>👤 Prepared for: <strong>${record.clientName}</strong></span>`;
+          }
+          if (!subText) {
+            subText = '<span>🌴 Sri Lanka Custom Tour Quotation</span>';
+          }
+          bannerSubtitle.innerHTML = subText;
+
+          // Convert Base64 to Blob URL if available for 100% CORS-free instantaneous display
+          let pdfDisplayUrl = '';
+          if (record.pdfBase64) {
+            try {
+              const base64Data = record.pdfBase64.split(';base64,')[1] || record.pdfBase64;
+              const byteCharacters = atob(base64Data);
+              const byteNumbers = new Array(byteCharacters.length);
+              for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+              }
+              const byteArray = new Uint8Array(byteNumbers);
+              const blob = new Blob([byteArray], { type: 'application/pdf' });
+              pdfDisplayUrl = URL.createObjectURL(blob);
+            } catch(e) {
+              console.warn('Could not construct blob from base64:', e);
+              pdfDisplayUrl = record.pdfBase64;
+            }
+          } else if (record.pdfUrl) {
+            pdfDisplayUrl = record.pdfUrl;
+          }
+
+          if (!pdfDisplayUrl) {
+            showError('This itinerary record has no PDF document attached.');
+            return;
+          }
+
+          // Wire up Actions
+          btnDownloadLink.href = pdfDisplayUrl;
+          btnDownloadLink.setAttribute('download', (record.title || 'SunBird_Itinerary').replace(/[^a-zA-Z0-9_\-]/g, '_') + '.pdf');
+
+          const waMsg = encodeURIComponent(`Hello SunBird Lanka Tours, I am reviewing my itinerary "${record.title || 'Tour Itinerary'}" (ID: ${itineraryId}). Could you please advise on booking confirmation?`);
+          btnWhatsappLink.href = `https://wa.me/94770000000?text=${waMsg}`;
+
+          // Embed PDF inside iframe
+          pdfFrame.src = pdfDisplayUrl + (pdfDisplayUrl.startsWith('blob:') ? '' : '#toolbar=1&navpanes=0&scrollbar=1');
+          pdfFrame.style.display = 'block';
+          loadingScreen.style.display = 'none';
+
+        } catch (err) {
+          console.error('Error loading itinerary:', err);
+          showError('An unexpected network error occurred while loading your itinerary. Please check your internet connection.');
+        }
+      }
+
+      function showError(msg) {
+        loadingScreen.style.display = 'none';
+        pdfFrame.style.display = 'none';
+        errorScreen.style.display = 'flex';
+        errorDesc.textContent = msg;
+        bannerTitle.textContent = 'Access Restricted';
+        bannerSubtitle.textContent = 'Unable to display itinerary';
+      }
+
+      window.addEventListener('DOMContentLoaded', loadItinerary);
+    })();
+  </script>
+</body>
+</html>

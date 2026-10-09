@@ -412,16 +412,33 @@
     @media (max-width: 768px) {
       .viewer-header {
         padding: 8px 12px;
+        gap: 8px;
+      }
+      .brand-section {
+        flex: 1;
+        min-width: 0;
+        gap: 8px;
+        overflow: hidden;
       }
       .brand-logo {
         height: 32px;
+        flex-shrink: 0;
+      }
+      .brand-text {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
       }
       .brand-text h1 {
-        font-size: 0.95rem;
+        font-size: clamp(0.78rem, 3.6vw, 0.92rem);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        line-height: 1.2;
       }
       .brand-badge {
-        font-size: 0.58rem;
-        padding: 1px 5px;
+        display: none !important;
       }
       .brand-sub {
         display: none;
@@ -434,20 +451,29 @@
       .header-actions-mobile {
         display: flex;
         align-items: center;
-        gap: 6px;
+        flex-shrink: 0;
+        margin-left: auto;
       }
 
       .btn-header-call-sm {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 34px;
-        height: 34px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #fff;
-        border-radius: 7px;
+        width: 36px;
+        height: 36px;
+        background: rgba(56, 189, 248, 0.12);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        color: #38bdf8;
+        border-radius: 9px;
         text-decoration: none;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+      }
+      .btn-header-call-sm:hover,
+      .btn-header-call-sm:active {
+        background: rgba(56, 189, 248, 0.25);
+        border-color: #38bdf8;
+        color: #ffffff;
       }
 
       .sub-toolbar {
